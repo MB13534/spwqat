@@ -60,11 +60,12 @@ const useMap = (ref, mapConfig) => {
   const [virtualBoreVisible, setVirtualBoreVisible] = useState(false);
   const [dataVizVisible, setDataVizVisible] = useState(false);
   const [lastLocationIdClicked, setLastLocationIdClicked] = useState(null);
+  const [graphModeVisible, setGraphModeVisible] = useState(null);
 
   const [eventsRegistered, setEventsRegistered] = useState(false);
   const popUpRef = useRef(
     new mapboxgl.Popup({
-      maxWidth: "400px",
+      maxWidth: "276px",
       offset: 15,
       focusAfterOpen: false,
     })
@@ -96,6 +97,36 @@ const useMap = (ref, mapConfig) => {
     handleClearSearchRadiusBuffers,
     resetSearchRadiusBuffers,
   } = useSearchRadius({ enabled: false });
+
+  const handleGraphModeFromPoint = (ndx) => {
+    // layers.forEach((layer) => {
+    //   if (
+    //     ["spwqat-locations-circle", "spwqat-locations-symbol"].includes(
+    //       layer.id
+    //     )
+    //   ) {
+    //     map.setLayoutProperty(
+    //       layer?.lreProperties?.name || layer.id,
+    //       "visibility",
+    //       "visible"
+    //     );
+    //   } else {
+    //     map.setLayoutProperty(
+    //       layer?.lreProperties?.name || layer.id,
+    //       "visibility",
+    //       "none"
+    //     );
+    //   }
+    // });
+    setDataVizVisible(true);
+    // map.fire("closeAllPopups");
+
+    map.setFilter("spwqat-locations-circle", null);
+    map.setFilter("spwqat-locations-symbol", null);
+
+    setLastLocationIdClicked(ndx);
+    setGraphModeVisible(true);
+  };
 
   //adds control features as extended by MapboxDrawGeodesic (draw circle)
   let modes = MapboxDraw.modes;
@@ -283,7 +314,11 @@ const useMap = (ref, mapConfig) => {
       //MJB add event listener for all circle and symbol layers
       // pointer on mouseover
       const cursorPointerLayerIds = layers
-        .filter((layer) => ["circle", "symbol"].includes(layer.type))
+        .filter(
+          (layer) =>
+            ["circle", "symbol"].includes(layer.type) &&
+            !layer.lreProperties?.popup?.excludePopup
+        )
         .map((layer) => layer.id);
       cursorPointerLayerIds.forEach((layerId) => {
         map.on("mouseenter", layerId, () => {
@@ -303,9 +338,10 @@ const useMap = (ref, mapConfig) => {
 
         const features = map.queryRenderedFeatures(e.point);
 
-        setLastLocationIdClicked(features[0]?.properties.ndx);
-
-        setDataVizVisible(true);
+        if (features[0]?.layer?.id === "spwqat-locations-circle") {
+          setLastLocationIdClicked(features[0]?.properties.ndx);
+          setDataVizVisible(true);
+        }
 
         addBuffersToMap({
           map: map,
@@ -324,7 +360,9 @@ const useMap = (ref, mapConfig) => {
           : [e.lngLat.lng, e.lngLat.lat];
 
         //MJB add check for popups so they only appear on our dynamic layers
-        const popupLayerIds = layers.map((layer) => layer.id);
+        const popupLayerIds = layers
+          .filter((layer) => !layer?.lreProperties?.popup?.excludePopup)
+          .map((layer) => layer.id);
         if (
           features.length > 0 &&
           popupLayerIds.includes(features[0].layer.id)
@@ -339,7 +377,11 @@ const useMap = (ref, mapConfig) => {
             <StylesProvider jss={jss}>
               <MuiThemeProvider theme={createTheme(theme.currentTheme)}>
                 <ThemeProvider theme={createTheme(theme.currentTheme)}>
-                  <Popup layers={layers} features={myFeatures} />
+                  <Popup
+                    layers={layers}
+                    features={myFeatures}
+                    handleGraphModeFromPoint={handleGraphModeFromPoint}
+                  />
                 </ThemeProvider>
               </MuiThemeProvider>
             </StylesProvider>,
@@ -350,6 +392,9 @@ const useMap = (ref, mapConfig) => {
             .setDOMContent(popupNode)
             .addTo(map);
         }
+        map.on("closeAllPopups", () => {
+          popUpRef.current.remove();
+        });
       });
 
       // //handles copying coordinates and measurements to the clipboard
@@ -362,7 +407,7 @@ const useMap = (ref, mapConfig) => {
 
       setEventsRegistered(true);
       mapLogger.log("Event handlers attached to map");
-    }
+    } //eslint-disable-next-line
   }, [
     map,
     layers,
@@ -603,6 +648,8 @@ const useMap = (ref, mapConfig) => {
     setLastLocationIdClicked,
     dataVizVisible,
     setDataVizVisible,
+    setGraphModeVisible,
+    graphModeVisible,
   };
 };
 

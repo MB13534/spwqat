@@ -41,69 +41,82 @@ const styles = (theme) => ({
 
 const BenchmarkPopover = ({ classes, data, lowIsBad }) => {
   const popoverColors = [
-    typeof data.bmk_line4 === "number" && data.bmk_color4
+    typeof data.bmk_line3 === "number" && data.bmk_color4
       ? {
-          name: `>${data.bmk_line4} ${data.units}`,
+          name: `>${data.bmk_line3} ${data.units}`,
           color: data.bmk_color4,
         }
       : "",
-    typeof data.bmk_line3 === "number" &&
-    typeof data.bmk_line4 === "number" &&
-    data.bmk_color3
-      ? {
-          name: `${data.bmk_line3} - ${data.bmk_line4} ${data.units}`,
-          color: data.bmk_color3,
-        }
-      : "",
     typeof data.bmk_line2 === "number" &&
     typeof data.bmk_line3 === "number" &&
-    data.bmk_color2
+    data.bmk_color3
       ? {
           name: `${data.bmk_line2} - ${data.bmk_line3} ${data.units}`,
-          color: data.bmk_color2,
+          color: data.bmk_color3,
         }
       : "",
     typeof data.bmk_line1 === "number" &&
     typeof data.bmk_line2 === "number" &&
-    data.bmk_color1
+    data.bmk_color2
       ? {
           name: `${data.bmk_line1} - ${data.bmk_line2} ${data.units}`,
+          color: data.bmk_color2,
+        }
+      : "",
+    typeof data.bmk_line0 === "number" &&
+    typeof data.bmk_line1 === "number" &&
+    data.bmk_color1
+      ? {
+          name: `${data.bmk_line0} - ${data.bmk_line1} ${data.units}`,
           color: data.bmk_color1,
         }
       : "",
-    { name: `${data.param_abbrev} not detected`, color: `#4363D8` },
+    data.bmk_color0
+      ? {
+          name: `${data.param_abbrev} below detection limits`,
+          color: data.bmk_color0,
+        }
+      : {
+          name: `No benchmarks available`,
+          color: "cornflowerBlue",
+        },
   ];
 
   const popoverColorsReverse = [
-    typeof data.bmk_line1 === "number"
-      ? { name: `>${data.bmk_line1} ${data.units}`, color: "#4363D8" }
+    typeof data.bmk_line0 === "number" && data.bmk_color0
+      ? { name: `>${data.bmk_line0} ${data.units}`, color: data.bmk_color0 }
+      : "",
+    typeof data.bmk_line0 === "number" &&
+    typeof data.bmk_line1 === "number" &&
+    data.bmk_color1
+      ? {
+          name: `${data.bmk_line1} - ${data.bmk_line0}  ${data.units}`,
+          color: data.bmk_color1,
+        }
       : "",
     typeof data.bmk_line1 === "number" &&
     typeof data.bmk_line2 === "number" &&
-    data.bmk_color1
+    data.bmk_color2
       ? {
-          name: `${data.bmk_line2} - ${data.bmk_line1}  ${data.units}`,
-          color: data.bmk_color1,
+          name: `${data.bmk_line2} - ${data.bmk_line1} ${data.units}`,
+          color: data.bmk_color2,
         }
       : "",
     typeof data.bmk_line2 === "number" &&
     typeof data.bmk_line3 === "number" &&
-    data.bmk_color2
+    data.bmk_color3
       ? {
-          name: `${data.bmk_line3} - ${data.bmk_line2} ${data.units}`,
-          color: data.bmk_color2,
+          name: `${data.bmk_line3} - ${data.bmk_line2}  ${data.units}`,
+          color: data.bmk_color3,
         }
       : "",
     typeof data.bmk_line3 === "number" &&
     typeof data.bmk_line4 === "number" &&
-    data.bmk_color3
+    data.bmk_color4
       ? {
-          name: `${data.bmk_line4} - ${data.bmk_line3}  ${data.units}`,
-          color: data.bmk_color3,
+          name: `${data.bmk_line4} - ${data.bmk_line3} ${data.units}`,
+          color: data.bmk_color4,
         }
-      : "",
-    typeof data.bmk_line4 === "number" && data.bmk_color4
-      ? { name: `0 - ${data.bmk_line4} ${data.units}`, color: data.bmk_color4 }
       : "",
   ];
 

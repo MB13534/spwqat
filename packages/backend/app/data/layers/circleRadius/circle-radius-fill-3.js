@@ -17,5 +17,8 @@ module.exports = {
   },
   lreProperties: {
     layerGroup: 'Search Circle Radius',
+    popup: {
+      excludePopup: true,
+    },
   },
 };

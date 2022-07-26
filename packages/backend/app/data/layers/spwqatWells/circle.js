@@ -26,8 +26,8 @@ module.exports = {
     //   22, // max zoom level
     //   4, // stroke width at max zoom
     // ],
-    'circle-stroke-width': 1,
-    'circle-stroke-color': '#fff',
+    'circle-stroke-width': 2,
+    'circle-stroke-color': 'black',
   },
   layout: {
     visibility: 'visible',

@@ -1,21 +1,33 @@
 module.exports = (sequelize, DataTypes) => {
-  const {TEXT, DOUBLE, REAL, INTEGER} = DataTypes;
-  const TsAnnualForMapDisplay = sequelize.define(
-    'ts_annual_for_map_display',
+  const {TEXT, BOOLEAN, REAL, INTEGER, DATE, ARRAY} = DataTypes;
+  const TsDailyTableForMapDisplay = sequelize.define(
+    'ts_daily_table_for_map_display',
     {
+      organization: {
+        type: TEXT,
+      },
+      project: {
+        type: TEXT,
+      },
       parameter: {
         type: TEXT,
       },
-      collect_year: {
-        type: DOUBLE,
+      collect_date: {
+        type: DATE,
       },
-      result_median: {
-        type: REAL,
-      },
-      result_pctile85: {
+      result: {
         type: REAL,
       },
       units: {
+        type: REAL,
+      },
+      nondetect: {
+        type: BOOLEAN,
+      },
+      bmk_line0: {
+        type: REAL,
+      },
+      bmk_color0: {
         type: TEXT,
       },
       bmk_line1: {
@@ -76,6 +88,9 @@ module.exports = (sequelize, DataTypes) => {
         type: INTEGER,
         primaryKey: true,
       },
+      pors: {
+        type: ARRAY(TEXT),
+      },
     },
     {
       schema: 'ui',
@@ -85,5 +100,5 @@ module.exports = (sequelize, DataTypes) => {
     }
   );
 
-  return TsAnnualForMapDisplay;
+  return TsDailyTableForMapDisplay;
 };

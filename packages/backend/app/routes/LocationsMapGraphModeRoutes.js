@@ -18,6 +18,9 @@ router.post('/', (req, res, next) => {
   const where = {};
 
   where.stats_period = req.body.periodOfRecord;
+  where.recordcount = {
+    [Op.gte]: req.body.recordCount,
+  };
   where.parameter_ndx = {
     [Op.in]: req.body.parameters,
   };

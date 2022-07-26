@@ -1,11 +1,32 @@
 const express = require('express');
-const {ts_annual_for_map_display: model} = require('../../core/models');
+const {ts_daily_table_for_map_display: model} = require('../../core/models');
 const {Op} = require('sequelize');
 const router = express.Router();
 
 router.get('/', (req, res, next) => {
   model
     .findAll()
+    .then((data) => {
+      res.json(data);
+    })
+    .catch((err) => {
+      next(err);
+    });
+});
+
+router.post('/', (req, res, next) => {
+  const where = {};
+
+  where.parameter_ndx = {
+    [Op.in]: req.body.parameters,
+  };
+  where.pors = {[Op.contains]: [req.body.periodOfRecord]};
+  where.ndx = {
+    [Op.in]: req.body.indexes,
+  };
+
+  model
+    .findAll({where: where})
     .then((data) => {
       res.json(data);
     })
@@ -21,6 +42,7 @@ router.post('/:ndx', (req, res, next) => {
   where.parameter_ndx = {
     [Op.in]: req.body.parameters,
   };
+  where.pors = {[Op.contains]: [req.body.periodOfRecord]};
 
   model
     .findAll({where: where})

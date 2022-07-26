@@ -1,6 +1,13 @@
-import { MenuItem, TextField as MuiTextField } from "@material-ui/core";
-import React from "react";
+import {
+  FormControl,
+  InputLabel,
+  MenuItem,
+  OutlinedInput,
+  TextField as MuiTextField,
+} from "@material-ui/core";
+import React, { useEffect } from "react";
 import styled from "styled-components/macro";
+import useDebounce from "../../../hooks/useDebounce";
 
 const FiltersSection = styled.div`
   display: flex;
@@ -16,7 +23,7 @@ const FiltersContainer = styled.div`
 `;
 
 const TextField = styled(MuiTextField)`
-  width: 175px;
+  width: 150px;
   min-width: 125px;
   display: flex;
 `;
@@ -26,7 +33,20 @@ const FiltersBarGraphMode = ({
   handleFilterValues,
   periodOfRecords,
   analysisTypes,
+  inputValue,
+  setInputValue,
 }) => {
+  const handleInput = (event) => {
+    const { value } = event.target;
+    setInputValue(+value);
+  };
+
+  const debouncedSearchValue = useDebounce(inputValue, 1000);
+
+  useEffect(() => {
+    handleFilterValues("recordCount", debouncedSearchValue);
+  }, [debouncedSearchValue]); //eslint-disable-line
+
   return (
     <>
       <FiltersSection>
@@ -64,6 +84,33 @@ const FiltersBarGraphMode = ({
               </MenuItem>
             ))}
           </TextField>
+
+          <FormControl variant="outlined">
+            <InputLabel htmlFor="record-count">Min Records</InputLabel>
+            <OutlinedInput
+              style={{ width: "120px" }}
+              type="number"
+              autoComplete="off"
+              variant="outlined"
+              margin="dense"
+              label="Record Count"
+              value={inputValue}
+              onChange={handleInput}
+              // endAdornment={
+              //   <InputAdornment position="end">
+              //     <IconButton
+              //       size="small"
+              //       aria-label="record count"
+              //       onClick={() =>
+              //         handleFilterValues("recordCount", inputValue)
+              //       }
+              //     >
+              //       <SearchIcon />
+              //     </IconButton>
+              //   </InputAdornment>
+              // }
+            />
+          </FormControl>
         </FiltersContainer>
       </FiltersSection>
     </>

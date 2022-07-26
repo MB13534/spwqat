@@ -4,11 +4,12 @@ import { isNullOrUndef } from "chart.js/helpers";
 import { Pagination } from "@material-ui/lab";
 import { titleize } from "inflected";
 import { formatBooleanTrueFalse } from "../../../utils";
+import Button from "@material-ui/core/Button";
 
 const PopupWrap = styled.div`
-  height: 200px;
+  height: 132px;
   overflow-y: scroll;
-  width: 380px;
+  width: 256px;
 `;
 
 const PopupTable = styled.table`
@@ -30,7 +31,7 @@ const PopupCell = styled.td`
   margin: 0;
 `;
 
-const Popup = ({ features, layers }) => {
+const Popup = ({ features, layers, handleGraphModeFromPoint }) => {
   function getUniqueFeatures(array, comparatorProperty1, comparatorProperty2) {
     const existingFeatureKeys = {};
     // Because features come from tiled vector data, feature geometries may be split
@@ -39,14 +40,12 @@ const Popup = ({ features, layers }) => {
     //concat two ids to make a unique id
     return array.filter((el) => {
       if (
-        existingFeatureKeys[
-          el[comparatorProperty1] + el.layer[comparatorProperty2]
-        ]
+        existingFeatureKeys[el[comparatorProperty1] + el[comparatorProperty2]]
       ) {
         return false;
       } else {
         existingFeatureKeys[
-          el[comparatorProperty1] + el.layer[comparatorProperty2]
+          el[comparatorProperty1] + el[comparatorProperty2]
         ] = true;
         return true;
       }
@@ -80,6 +79,17 @@ const Popup = ({ features, layers }) => {
   if (feature?.layer?.id === "spwqat-locations-circle") {
     popupData = [
       [
+        "Graph Mode",
+        <Button
+          size="small"
+          variant="contained"
+          color="primary"
+          onClick={() => handleGraphModeFromPoint(feature?.properties?.ndx)}
+        >
+          View Data
+        </Button>,
+      ],
+      [
         "Period of Record",
         `${new Date(feature?.properties.por_start).getFullYear()} - ${new Date(
           feature?.properties.por_end
@@ -109,13 +119,28 @@ const Popup = ({ features, layers }) => {
       : Object.entries(feature?.properties);
   }
 
+  const [titleField, setTitleField] = useState("");
+
+  useEffect(() => {
+    const title = layers?.find((layer) => layer?.id === feature?.layer?.id)
+      ?.lreProperties?.popup?.titleField;
+    setTitleField(
+      (title &&
+        feature?.properties[title] &&
+        `${feature?.properties[title]} (${titleize(
+          feature?.layer?.source
+        )})`) ||
+        titleize(feature?.layer?.source)
+    );
+  }, [feature, layers]);
+
   if (!popupData) return null;
   return (
     <>
       <h2 style={{ marginBottom: 0 }}>
         {feature?.layer?.id === "spwqat-locations-circle"
           ? feature?.properties.station_name
-          : titleize(feature?.layer?.id)}
+          : titleField}
       </h2>
       <h3 style={{ marginTop: 0 }}>
         {feature?.layer?.id === "spwqat-locations-circle" &&
@@ -140,7 +165,7 @@ const Popup = ({ features, layers }) => {
       <Pagination
         style={{ display: "flex", justifyContent: "center", marginTop: "10px" }}
         count={uniqueFeatures.length}
-        size="medium"
+        size="small"
         page={page}
         variant="outlined"
         shape="rounded"

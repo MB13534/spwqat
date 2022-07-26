@@ -29,6 +29,10 @@ import CommaSeparatedWellsSearch from "./filters/commaSeparatedWellsSearch";
 import useGraphMode from "./hooks/useGraphMode";
 import DataViz from "./components/DataViz";
 import DataVizControl from "./controls/dataVizControl";
+import Legend from "./components/Legend";
+import LegendControl from "./controls/LegendControl";
+import GraphModeLayersToggle from "./controls/GraphModeLayersToggle";
+import GraphModePopupToggle from "./controls/GraphModePopupToggle";
 
 const FiltersBarRoot = styled(Paper)`
   align-items: center;
@@ -96,6 +100,8 @@ const PublicMap = () => {
     setLastLocationIdClicked,
     dataVizVisible,
     setDataVizVisible,
+    graphModeVisible,
+    setGraphModeVisible,
   } = useMap(mapContainer, INIT_MAP_CONFIG);
   const {
     filterValues,
@@ -113,7 +119,8 @@ const PublicMap = () => {
     handleFilterValuesGraphMode,
     onSelectAllParameters,
     onSelectNoneParameters,
-    graphModeVisible,
+    onSelectAllParameterGroups,
+    onSelectNoneParameterGroups,
     handleGraphModeClick,
     hasGraphDataLoaded,
     analyticsResults,
@@ -121,6 +128,16 @@ const PublicMap = () => {
     isTimeSeriesResultsLoading,
     getHexColorForScore,
     isAnalyticsTableDataLoading,
+    legendVisible,
+    setLegendVisible,
+    graphModeBenchmarkColors,
+    handleGraphModeLayersToggleClick,
+    graphModeLayersVisible,
+    graphModePopupVisible,
+    setGraphModePopupVisible,
+    inputValue,
+    setInputValue,
+    handleExportClick,
   } = useGraphMode({
     map,
     updateLayerFilters,
@@ -130,6 +147,8 @@ const PublicMap = () => {
     setDataVizVisible,
     lastLocationIdClicked,
     setLastLocationIdClicked,
+    graphModeVisible,
+    setGraphModeVisible,
   });
 
   const printRef = useRef();
@@ -147,9 +166,17 @@ const PublicMap = () => {
     a.click();
   };
 
-  const splitButtonOptions = ["Print PDF", "Save PNG"];
+  const splitButtonOptions = [
+    "Print PDF",
+    "Save PNG",
+    "Export Time Series",
+    "Export Stats & Benchmarks",
+  ];
   const handleSplitButtonClick = (index) => {
-    if (![0, 1].includes(index)) return;
+    if ([2, 3].includes(index)) {
+      handleExportClick(index);
+      return;
+    }
 
     if (index === 0) {
       setPrintReportDialogOpen(true);
@@ -206,6 +233,8 @@ const PublicMap = () => {
             periodOfRecords={periodOfRecords}
             analysisTypes={analysisTypes}
             handleFilterValues={handleFilterValuesGraphMode}
+            inputValue={inputValue}
+            setInputValue={setInputValue}
           />
         ) : (
           <FiltersBar
@@ -222,6 +251,7 @@ const PublicMap = () => {
               <SplitButton
                 options={splitButtonOptions}
                 handleExportClick={handleSplitButtonClick}
+                graphModeVisible={graphModeVisible}
               />
               <PrintReportDialog
                 downloadCallback={handlePrintMapClick}
@@ -253,6 +283,8 @@ const PublicMap = () => {
             parameters={parameters}
             onSelectAllParameters={onSelectAllParameters}
             onSelectNoneParameters={onSelectNoneParameters}
+            onSelectAllParameterGroups={onSelectAllParameterGroups}
+            onSelectNoneParameterGroups={onSelectNoneParameterGroups}
           />
         ) : (
           <MainControl
@@ -280,6 +312,7 @@ const PublicMap = () => {
             isTimeSeriesResultsLoading={isTimeSeriesResultsLoading}
             getHexColorForScore={getHexColorForScore}
             isAnalyticsTableDataLoading={isAnalyticsTableDataLoading}
+            lastLocationIdClicked={lastLocationIdClicked}
           />
         )}
 
@@ -292,15 +325,32 @@ const PublicMap = () => {
 
         {graphModeVisible && (
           <>
-            <div
-              dangerouslySetInnerHTML={{
-                __html: "<style>.mapboxgl-popup { display: none; }</style>",
-              }}
-            />
             <DataVizControl
               open={dataVizVisible}
               handleClick={() => setDataVizVisible(!dataVizVisible)}
             />
+            <LegendControl
+              open={legendVisible}
+              onToggle={() => setLegendVisible(!legendVisible)}
+            />
+            {legendVisible && (
+              <Legend legendColors={graphModeBenchmarkColors} />
+            )}
+            <GraphModeLayersToggle
+              open={graphModeLayersVisible}
+              onToggle={handleGraphModeLayersToggleClick}
+            />
+            <GraphModePopupToggle
+              open={graphModePopupVisible}
+              onToggle={() => setGraphModePopupVisible(!graphModePopupVisible)}
+            />
+            {!graphModePopupVisible && (
+              <div
+                dangerouslySetInnerHTML={{
+                  __html: "<style>.mapboxgl-popup { display: none; }</style>",
+                }}
+              />
+            )}
           </>
         )}
 

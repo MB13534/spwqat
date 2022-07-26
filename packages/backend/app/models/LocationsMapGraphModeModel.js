@@ -83,6 +83,21 @@ module.exports = (sequelize, DataTypes) => {
       low_is_bad: {
         type: BOOLEAN,
       },
+      bmk_line0: {
+        type: REAL,
+      },
+      bmk_line1: {
+        type: REAL,
+      },
+      bmk_line2: {
+        type: REAL,
+      },
+      bmk_line3: {
+        type: REAL,
+      },
+      bmk_line4: {
+        type: REAL,
+      },
     },
     {
       schema: 'ui',

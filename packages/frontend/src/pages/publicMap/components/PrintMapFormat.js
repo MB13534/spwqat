@@ -31,7 +31,7 @@ const PrintMapFormat = forwardRef(({ title, mapImg, map }, ref) => {
             <img
               src="/static/img/spwqat-logo-full.png"
               width="200px"
-              alt={"Denter Metro WQAT"}
+              alt={"Denver Metro WQAT"}
             />
           </Grid>
           <Grid item xs={6}>

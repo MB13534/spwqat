@@ -1,5 +1,5 @@
 const express = require('express');
-const {ts_daily_for_map_display: model} = require('../../core/models');
+const {ts_annual_table_for_map_display: model} = require('../../core/models');
 const {Op} = require('sequelize');
 const router = express.Router();
 
@@ -21,6 +21,7 @@ router.post('/:ndx', (req, res, next) => {
   where.parameter_ndx = {
     [Op.in]: req.body.parameters,
   };
+  where.pors = {[Op.contains]: [req.body.periodOfRecord]};
 
   model
     .findAll({where: where})

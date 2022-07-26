@@ -29,6 +29,8 @@ const ParametersControl = ({
     parameters,
     onSelectAllParameters,
     onSelectNoneParameters,
+    onSelectAllParameterGroups,
+    onSelectNoneParameterGroups,
   },
 }) => {
   return (
@@ -38,7 +40,34 @@ const ParametersControl = ({
           <Typography variant="subtitle1" gutterBottom>
             Parameter Groups
           </Typography>
-
+          <Box mb={2}>
+            <Grid container spacing={2}>
+              <Grid item xs={6}>
+                <Button
+                  disabled={!parameterGroups.length}
+                  variant="outlined"
+                  color="secondary"
+                  fullWidth
+                  size="small"
+                  onClick={onSelectAllParameterGroups}
+                >
+                  + Select All
+                </Button>
+              </Grid>
+              <Grid item xs={6}>
+                <Button
+                  disabled={!parameterGroups.length}
+                  variant="outlined"
+                  color="secondary"
+                  fullWidth
+                  size="small"
+                  onClick={onSelectNoneParameterGroups}
+                >
+                  - Select None
+                </Button>
+              </Grid>
+            </Grid>
+          </Box>
           <Chips
             data={parameterGroups.filter((item) =>
               item.stats_period.includes(filterValues.periodOfRecord)

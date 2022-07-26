@@ -29,7 +29,8 @@ const AccordionDetails = styled(MuiAccordionDetails)`
   background-color: #fafafa;
   border-top: 1px solid #ddd;
   border-bottom: 1px solid #ddd;
-  max-height: 487px;
+  // max-height: 487px;
+  max-height: 60vh;
   height: auto;
   overflow-x: hidden;
   overflow-y: auto;

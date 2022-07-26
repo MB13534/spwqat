@@ -8,7 +8,7 @@ require('./core/models');
 const {setHeaders} = require('./core/middleware');
 const {addCrudRoutes} = require('./core/middleware/addCrudRoutes');
 
-const PORT = process.env.PORT || 3005;
+const PORT = process.env.PORT || 3006;
 
 if (!process.env.PORT) process.env.PORT = PORT;
 

@@ -11,7 +11,7 @@ import MenuList from "@material-ui/core/MenuList";
 import useTheme from "@material-ui/core/styles/useTheme";
 import DownloadIcon from "@material-ui/icons/GetApp";
 
-const SplitButton = ({ handleExportClick, options }) => {
+const SplitButton = ({ handleExportClick, options, graphModeVisible }) => {
   const theme = useTheme();
 
   const [open, setOpen] = React.useState(false);
@@ -48,6 +48,8 @@ const SplitButton = ({ handleExportClick, options }) => {
         }}
       >
         <Button
+          style={{ width: "215px" }}
+          disabled={[2, 3].includes(selectedIndex) && !graphModeVisible}
           startIcon={<DownloadIcon />}
           onClick={() => handleExportClick(selectedIndex)}
         >
@@ -88,6 +90,7 @@ const SplitButton = ({ handleExportClick, options }) => {
                 <MenuList id="split-button-menu">
                   {options.map((option, index) => (
                     <MenuItem
+                      disabled={[2, 3].includes(index) && !graphModeVisible}
                       key={option}
                       selected={index === selectedIndex}
                       onClick={(event) => handleMenuItemClick(event, index)}
