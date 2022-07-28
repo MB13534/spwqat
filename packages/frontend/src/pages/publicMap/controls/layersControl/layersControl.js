@@ -107,7 +107,6 @@ const handleSliderChange = (event, newValue, item, onOpacityChange) => {
 const LayerSlider = ({ item, onOpacityChange }) => {
   const layerFillOpacity =
     item?.type === "fill" &&
-    item.name !== "Search Circle Radius" &&
     (item?.paint["fill-opacity"] === 0 || item?.paint["fill-opacity"])
       ? item?.paint["fill-opacity"]
       : null;
@@ -152,10 +151,7 @@ const LayerLegend = ({ item, open, onOpacityChange }) => {
  * [] Add support for layers search
  */
 const LayersControl = ({ items, onLayerChange, onOpacityChange }) => {
-  const [expandedItems, setExpandedItems] = useState([
-    "SPWQAT Locations",
-    "Search Circle Radius",
-  ]);
+  const [expandedItems, setExpandedItems] = useState(["SPWQAT Locations"]);
 
   /**
    * Generate a unique list of items to display in the layer

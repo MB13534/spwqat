@@ -9,12 +9,10 @@ import {
 } from "@material-ui/core";
 import LayersIcon from "@material-ui/icons/Layers";
 import MapIcon from "@material-ui/icons/Map";
-import SearchRadiusIcon from "@material-ui/icons/WifiTethering";
 import ExpandMore from "@material-ui/icons/ExpandMore";
 import styled from "styled-components/macro";
 import LayersControl from "../layersControl";
 import BasemapsControl from "../basemapsControl";
-import SearchRadiusControl from "../searchRadiusControl";
 
 const Container = styled(Paper)`
   background: none;
@@ -42,27 +40,16 @@ const AccordionDetails = styled(MuiAccordionDetails)`
 const MainControl = ({
   activeBasemap,
   basemaps,
-  bufferValues,
   layers,
   onBasemapChange,
-  onBufferValuesChange,
-  onClearBuffers,
   onLayerChange,
   onOpacityChange,
-  onResetBuffers,
-  onEnableSearchRadiusControl,
   value,
 }) => {
   const [expandedItem, setExpandedItem] = useState("layers");
 
   const handleChange = (panel) => (event, isExpanded) => {
     setExpandedItem(isExpanded ? panel : false);
-
-    if (panel === "search-radius") {
-      onEnableSearchRadiusControl(isExpanded);
-    } else {
-      onEnableSearchRadiusControl(false);
-    }
   };
 
   return (
@@ -107,29 +94,6 @@ const MainControl = ({
             items={layers}
             onLayerChange={onLayerChange}
             onOpacityChange={onOpacityChange}
-          />
-        </AccordionDetails>
-      </Accordion>
-      <Accordion
-        expanded={expandedItem === "search-radius"}
-        onChange={handleChange("search-radius")}
-      >
-        <AccordionSummary
-          aria-controls="search-radius-content"
-          id="search-radius-header"
-          expandIcon={<ExpandMore />}
-        >
-          <Box alignItems="center" display="flex" gridColumnGap={8}>
-            <SearchRadiusIcon />
-            <Typography variant="subtitle1">Search Radius Tool</Typography>
-          </Box>
-        </AccordionSummary>
-        <AccordionDetails>
-          <SearchRadiusControl
-            bufferValues={bufferValues}
-            onBufferValuesChange={onBufferValuesChange}
-            onClearBuffers={onClearBuffers}
-            onResetBuffers={onResetBuffers}
           />
         </AccordionDetails>
       </Accordion>

@@ -5,7 +5,6 @@ import mapboxgl from "!mapbox-gl"; // eslint-disable-line import/no-webpack-load
 import Popup from "../../popup";
 import useSources from "../useSources";
 import useLayers from "../useLayers";
-import useSearchRadius from "../useSearchRadius";
 import { coordinatesGeocoder, MapLogger } from "./mapUtils";
 import { BASEMAP_STYLES } from "../../constants";
 import debounce from "lodash.debounce";
@@ -88,15 +87,6 @@ const useMap = (ref, mapConfig) => {
   // Fetch a list of sources  and layers to add to the map
   const { sources } = useSources();
   const { layers, setLayers } = useLayers();
-
-  const {
-    addBuffersToMap,
-    searchRadiusBuffers,
-    handleControlEnabled: handleEnableSearchRadiusControl,
-    handleSearchRadiusBuffersChange: updateSearchRadiusBuffers,
-    handleClearSearchRadiusBuffers,
-    resetSearchRadiusBuffers,
-  } = useSearchRadius({ enabled: false });
 
   const handleGraphModeFromPoint = (ndx) => {
     // layers.forEach((layer) => {
@@ -343,11 +333,6 @@ const useMap = (ref, mapConfig) => {
           setDataVizVisible(true);
         }
 
-        addBuffersToMap({
-          map: map,
-          coordinates: [e.lngLat.lng, e.lngLat.lat],
-        });
-
         //Ensure that if the map is zoomed out such that multiple
         //copies of the feature are visible, the popup appears
         //over the copy being pointed to.
@@ -408,14 +393,7 @@ const useMap = (ref, mapConfig) => {
       setEventsRegistered(true);
       mapLogger.log("Event handlers attached to map");
     } //eslint-disable-next-line
-  }, [
-    map,
-    layers,
-    dataAdded,
-    eventsRegistered,
-    theme.currentTheme,
-    addBuffersToMap,
-  ]);
+  }, [map, layers, dataAdded, eventsRegistered, theme.currentTheme]);
 
   /**
    * Handler used to apply user's filter values to the map instance
@@ -621,11 +599,6 @@ const useMap = (ref, mapConfig) => {
     map,
     sources,
     zoomLevel,
-    searchRadiusBuffers,
-    handleClearSearchRadiusBuffers,
-    handleEnableSearchRadiusControl,
-    resetSearchRadiusBuffers,
-    updateSearchRadiusBuffers,
     updateBasemap,
     updateLayerFilters,
     updateLayerStyles,
