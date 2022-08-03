@@ -7,7 +7,7 @@ const Root = styled.div`
   border-radius: 4px;
   position: absolute;
   z-index: 2;
-  top: 58px;
+  top: 98px;
   right: 50px;
   padding: 15px;
   padding-top: 0;

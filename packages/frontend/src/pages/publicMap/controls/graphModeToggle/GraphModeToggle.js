@@ -1,6 +1,8 @@
 import React from "react";
-import { IconButton, Box, Tooltip } from "@material-ui/core";
+import { Box } from "@material-ui/core";
 import GraphIcon from "@material-ui/icons/BarChart";
+import Button from "@material-ui/core/Button";
+import MapIcon from "@material-ui/icons/Map";
 
 const GraphModeToggle = ({ open = false, handleClick }) => {
   return (
@@ -14,16 +16,17 @@ const GraphModeToggle = ({ open = false, handleClick }) => {
       right={10}
       display="flex"
       flexDirection="column"
+      width={260}
     >
-      <Tooltip title="Graph Mode" placement="left">
-        <IconButton
-          size="small"
-          color={open ? "secondary" : "default"}
-          onClick={handleClick}
-        >
-          <GraphIcon />
-        </IconButton>
-      </Tooltip>
+      <Button
+        onClick={handleClick}
+        color={open ? "primary" : "secondary"}
+        variant="contained"
+        size="small"
+        startIcon={open ? <MapIcon /> : <GraphIcon />}
+      >
+        {open ? "Return to Map Explorer" : "Explore in Graph Mode"}
+      </Button>
     </Box>
   );
 };

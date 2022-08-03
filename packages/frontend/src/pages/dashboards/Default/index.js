@@ -364,6 +364,23 @@ function Default() {
                 </AboutLink>{" "}
                 page.
               </Typography>
+              <Typography
+                variant="body2"
+                component="p"
+                style={{
+                  padding: "15px",
+                  lineHeight: "1.8",
+                  fontSize: ".95rem",
+                }}
+              >
+                This product is for informational purposes only and may not have
+                been prepared for or suitable for legal, engineering, or
+                surveying purposes. It does not represent an on-the-ground
+                survey and represents only the approximate relative location of
+                property boundaries. The South Platte Urban Waters Partnership
+                and The Water Quality Assessment Tool Working Group expressly
+                disclaim any and all liability in connection herewith.
+              </Typography>
             </Description>
           </Grid>
           <Grid item xs={12} lg={4} align="center">

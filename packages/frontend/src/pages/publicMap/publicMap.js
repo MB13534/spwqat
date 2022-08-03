@@ -2,6 +2,7 @@ import React, { useRef, useState } from "react";
 import styled from "styled-components/macro";
 import "@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css";
 import { MenuItem, Paper, TextField as MuiTextField } from "@material-ui/core";
+import "./styles.css";
 
 import Map from "./map";
 import ZoomInfo from "./controls/zoomInfo";
@@ -10,7 +11,6 @@ import useFilters from "./hooks/useFilters";
 
 import { INIT_MAP_CONFIG, WELLS_SEARCH_OPTIONS } from "./constants";
 
-import DisclaimerDialog from "./components/DisclaimerDialog";
 import MeasurementsPopup from "../../components/map/components/MeasurementsPopup";
 import MainControl from "./controls/mainControl/";
 
@@ -191,7 +191,7 @@ const PublicMap = () => {
 
   return (
     <>
-      {process.env.NODE_ENV !== "development" && <DisclaimerDialog />}
+      {/*{process.env.NODE_ENV !== "development" && <DisclaimerDialog />}*/}
 
       {process.env.NODE_ENV === "development" && (
         <ZoomInfo zoomLevel={zoomLevel} />
